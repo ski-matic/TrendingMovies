@@ -7,14 +7,16 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.learning.trendingmovies.data.Configuration
 import com.learning.trendingmovies.data.Movie
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers
 
 class MovieListViewModel constructor(application: Application) : AndroidViewModel(application) {
 
-    private val TAG = "MovieListViewModel"
+    companion object {
+        private const val TAG = "MovieListViewModel"
+    }
+
     //    private var repository: MovieListRepository = MovieListRepository(application)
     private var repository: MovieListRepository = MovieListRepository()
     private var disposables: CompositeDisposable = CompositeDisposable()
@@ -27,7 +29,7 @@ class MovieListViewModel constructor(application: Application) : AndroidViewMode
 
     private val movies: MutableLiveData<List<Movie>> by lazy {
         MutableLiveData<List<Movie>>().also {
-            fetchMovies()
+            fetchConfigurationAndMovies()
         }
     }
 
@@ -35,14 +37,43 @@ class MovieListViewModel constructor(application: Application) : AndroidViewMode
         return movies
     }
 
-    fun fetchMovies() {
+    // Replace this with Rx zip
+    fun fetchConfigurationAndMovies() {
+        Log.d(
+            "Richard-debug",
+            "$TAG: fetchConfigurationAndMovies: configuration: " + configuration.value
+        )
+        if (configuration.value == null) {
+            disposables +=
+                repository.getConfiguration()
+                    .subscribe({
+                        configuration.postValue(it)
+                        fetchMovies()
+                    }, {
+                        Log.d(TAG, "fetchConfiguration: error: " + it.message)
+                    })
+        } else {
+            fetchMovies()
+        }
+    }
+
+    private fun fetchMovies() {
         disposables +=
             repository.getAllMovies()
                 .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    Log.d("Richard-debug", "$TAG: fetchMovies: " + it)
-                    movies.postValue(it.results)
+                .observeOn(Schedulers.io())
+                .subscribe({ trendingResults ->
+                    // We should be gauranteed to have a configuration at this point because
+                    // "fetchConfigurationAndMovies()" makes fetch movies only after the configuration
+                    // is retrieved.  This should be replace with a Rx "zip" call though
+                    val config = configuration.value!!
+
+                    // It would be nice to set this list and then calculate the poster URLs after
+                    trendingResults.results.forEach {
+                        it.setPosterUrl(config.images.secure_base_url, config.images.poster_sizes)
+                    }
+
+                    movies.postValue(trendingResults.results)
                 }, {
                     Log.d("Richard-debug", "$TAG: fetchMovies: error: " + it.message)
                 })
@@ -52,7 +83,7 @@ class MovieListViewModel constructor(application: Application) : AndroidViewMode
         return configuration
     }
 
-    fun fetchConfiguration() {
+    private fun fetchConfiguration() {
         disposables +=
             repository.getConfiguration()
                 .subscribe({

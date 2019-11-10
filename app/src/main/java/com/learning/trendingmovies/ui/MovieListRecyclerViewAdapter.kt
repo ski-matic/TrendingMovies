@@ -6,10 +6,11 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
+import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.learning.trendingmovies.R
 import com.learning.trendingmovies.data.Movie
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_list_content.view.*
 
 class MovieListRecyclerViewAdapter(
@@ -17,7 +18,10 @@ class MovieListRecyclerViewAdapter(
     private val twoPane: Boolean
 ) : RecyclerView.Adapter<MovieListRecyclerViewAdapter.ViewHolder>() {
 
-    private val TAG = "MovieListRecyclerViewAdapter"
+    companion object {
+        private const val TAG = "MovieListRecyclerViewAdapter"
+    }
+
     var values: List<Movie> = emptyList()
     private val onClickListener: View.OnClickListener
 
@@ -52,8 +56,11 @@ class MovieListRecyclerViewAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = values[position]
-        holder.idView.text = item.title
-        holder.contentView.text = item.release_date
+
+        Picasso.with(holder.itemView.context)
+            .load(item.posterFullUrl)
+//            .placeholder()
+            .into(holder.posterImage)
 
         with(holder.itemView) {
             tag = item
@@ -64,7 +71,6 @@ class MovieListRecyclerViewAdapter(
     override fun getItemCount() = values.size
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val idView: TextView = view.id_text
-        val contentView: TextView = view.content
+        val posterImage: ImageView = view.poster
     }
 }

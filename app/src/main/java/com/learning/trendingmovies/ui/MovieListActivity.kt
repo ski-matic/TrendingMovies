@@ -5,7 +5,7 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.learning.trendingmovies.MovieListViewModel
@@ -30,7 +30,11 @@ class MovieListActivity : AppCompatActivity() {
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
      * device.
      */
-    private val TAG = "MovieListActivity"
+    companion object {
+        private const val TAG = "MovieListActivity"
+        private const val NUM_GRID_COLUMNS = 3
+    }
+
     private var twoPane: Boolean = false
     private lateinit var viewModel: MovieListViewModel
     private lateinit var disposables: CompositeDisposable
@@ -49,8 +53,7 @@ class MovieListActivity : AppCompatActivity() {
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show()
 
-//            fetchConfiguration()
-            viewModel.fetchConfiguration()
+            viewModel.fetchConfigurationAndMovies()
 
         }
 
@@ -69,23 +72,16 @@ class MovieListActivity : AppCompatActivity() {
             adapter.notifyDataSetChanged()
         })
 
-        viewModel.getConfiguration().observe(this, Observer<Configuration> {
-            Log.d("Richard-debug", "$TAG: configuration: " + it)
-        })
+//        viewModel.getConfiguration().observe(this, Observer<Configuration> {
+//            Log.d("Richard-debug", "$TAG: configuration: " + it)
+//        })
 
         setupRecyclerView(item_list)
     }
 
     private fun setupRecyclerView(recyclerView: RecyclerView) {
-        recyclerView.adapter =
-            MovieListRecyclerViewAdapter(this, twoPane)
-//        recyclerView.layoutManager = GridLayoutManager(this, 2)
-        recyclerView.addItemDecoration(
-            DividerItemDecoration(
-                this,
-                DividerItemDecoration.VERTICAL
-            )
-        )
+        recyclerView.adapter = MovieListRecyclerViewAdapter(this, twoPane)
+        recyclerView.layoutManager = GridLayoutManager(this, NUM_GRID_COLUMNS)
     }
 
     override fun onDestroy() {

@@ -22,9 +22,27 @@ X Load the data automatically when the app starts
 X Configuration
   X Make "Configuration" fetched using retrofit
   X save the configuration to the viewModel and expose it to the activity via LiveData
+X Load the poster image using picasso
+X Change recyclerView to be a gridlayout and
+X Update the app icon, FAB icon and colors
+X Added "fetchConfigurationAndMovies" to handle chaining the calls to make sure the configuration
+  exists so when we go through the list of movies we can set the poster URL
 
+- Instead of each Movie have a full URL, maybe they could all share a base URL
+
+- Use Rx "zip" function that waits for both configuration and movie to be fetched instead of "fetchConfigurationAndMovies()"
 - When should the configuration be fetched?
 
+- When I get the list of movies back, it would be nice to set that list in the UI and maybe calculate the poster URL's afterward
+  instead of waiting until all the poster URL's have been created on the movies in the list
+
+- Download the images before the "onBindViewHolder" method so it might already be there
+
+- Don't hard code the number of colums - base it on dimensions of images and dimensions of screen
+- Add a picasso "Placeholder" for the image when it's loading
+- Use Picasso to resize the image to the size of the cell it's in
+- Poster size is hard coded.  Would be better to figure out the best size
+- handle no internet connection
 - for each item, go fetch the image
   - to start, do this when the item is displayed?
   - when should this actually take place?  Should the "Movie" object contain the actual image?

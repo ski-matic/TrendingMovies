@@ -16,8 +16,21 @@ data class Movie(
     var video: Boolean,
     var vote_average: Float
 ) {
-    fun getPosterUrl(baseUrl: String): String {
-        return baseUrl + poster_path
+    companion object {
+        private const val TAG = "Movie"
+        private const val POSTER_SIZE_INDEX = 2
     }
+
+    var posterFullUrl: String? = null
+
+    fun setPosterUrl(baseUrl: String, posterSizes: List<String>) {
+        val posterSize = posterSizes[POSTER_SIZE_INDEX]
+        posterFullUrl = "$baseUrl$posterSize$poster_path"
+    }
+
+    override fun toString(): String {
+        return "Movie(title='$title')"
+    }
+
 }
 
