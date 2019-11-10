@@ -3,14 +3,17 @@ package com.learning.trendingmovies.ui
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.learning.trendingmovies.MovieListViewModel
 import com.learning.trendingmovies.R
+import com.learning.trendingmovies.data.Configuration
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_item_list.*
 import kotlinx.android.synthetic.main.item_list.*
@@ -31,7 +34,7 @@ class MovieListActivity : AppCompatActivity() {
      */
     private var twoPane: Boolean = false
     private lateinit var viewModel: MovieListViewModel
-    private var disposable: Disposable? = null
+    private lateinit var disposables: CompositeDisposable
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,13 +43,15 @@ class MovieListActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         toolbar.title = title
 
+        disposables = CompositeDisposable()
         viewModel = ViewModelProviders.of(this).get(MovieListViewModel::class.java)
 
         fab.setOnClickListener { view ->
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show()
 
-            fetchMovies()
+//            fetchConfiguration()
+            viewModel.fetchConfiguration()
 
         }
 
@@ -60,11 +65,21 @@ class MovieListActivity : AppCompatActivity() {
 
         fetchMovies()
 
+        viewModel.getConfiguration().observe(this, Observer<Configuration> {
+            Log.d("Richard-debug", "fetchConfiguration: " + it)
+        })
+
         setupRecyclerView(item_list)
     }
 
+    private fun fetchConfiguration() {
+        viewModel.getConfiguration().observe(this, Observer<Configuration> {
+            Log.d("Richard-debug", "fetchConfiguration: " + it)
+        })
+    }
+
     private fun fetchMovies() {
-        disposable =
+        disposables +=
             viewModel.fetchMovies()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -93,7 +108,7 @@ class MovieListActivity : AppCompatActivity() {
     }
 
     override fun onDestroy() {
-        disposable?.dispose()
+        disposables.clear()
         super.onDestroy()
     }
 

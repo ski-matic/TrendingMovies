@@ -19,6 +19,14 @@ X display the list of movies (titles)
 X replace the linearLayout of each row item with a constraintLayout
 X Update the icon of the app
 X Load the data automatically when the app starts
+X Configuration
+  X Make "Configuration" fetched using retrofit
+  X save the configuration to the viewModel and expose it to the activity via LiveData
+
+- When should the configuration be fetched?
+
+
+- replace "Richard-debug" with something else
 - for each item, go fetch the image
   - to start, do this when the item is displayed?
   - when should this actually take place?  Should the "Movie" object contain the actual image?

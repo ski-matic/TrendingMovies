@@ -1,22 +1,16 @@
 package com.learning.trendingmovies
 
-import android.app.Application
+import com.learning.trendingmovies.data.Configuration
 import com.learning.trendingmovies.data.TrendingResults
 import io.reactivex.Single
 
-class MovieListRepository(application: Application) {
+//class MovieListRepository(application: Application) {
+class MovieListRepository() {
 
     private val movieDatabaseAPI: MovieDatabaseAPI
 
     init {
         movieDatabaseAPI = MovieDatabaseAPI.create()
-    }
-
-    fun getAllMovies(): Single<TrendingResults> {
-        return movieDatabaseAPI.getMovies(
-            MediaType.MOVIE.mediaTypeName,
-            TimeWindow.DAY.timeWindowName
-        )
     }
 
     enum class MediaType(val mediaTypeName: String) {
@@ -29,5 +23,16 @@ class MovieListRepository(application: Application) {
     enum class TimeWindow(val timeWindowName: String) {
         DAY("day"),
         WEEK("week");
+    }
+
+    fun getAllMovies(): Single<TrendingResults> {
+        return movieDatabaseAPI.getMovies(
+            MediaType.MOVIE.mediaTypeName,
+            TimeWindow.DAY.timeWindowName
+        )
+    }
+
+    fun getConfiguration(): Single<Configuration> {
+        return movieDatabaseAPI.getConfiguration()
     }
 }
