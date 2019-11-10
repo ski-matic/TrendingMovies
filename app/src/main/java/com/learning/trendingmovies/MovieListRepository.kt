@@ -1,6 +1,7 @@
 package com.learning.trendingmovies
 
 import android.app.Application
+import com.learning.trendingmovies.data.TrendingResults
 import io.reactivex.Single
 
 class MovieListRepository(application: Application) {

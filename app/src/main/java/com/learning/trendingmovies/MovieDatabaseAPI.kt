@@ -1,5 +1,6 @@
 package com.learning.trendingmovies
 
+import com.learning.trendingmovies.data.TrendingResults
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import retrofit2.Retrofit

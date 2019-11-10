@@ -1,10 +1,12 @@
-package com.learning.trendingmovies
+package com.learning.trendingmovies.ui
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.learning.trendingmovies.data.Movie
+import com.learning.trendingmovies.R
 import kotlinx.android.synthetic.main.activity_item_detail.*
 import kotlinx.android.synthetic.main.item_detail.view.*
 

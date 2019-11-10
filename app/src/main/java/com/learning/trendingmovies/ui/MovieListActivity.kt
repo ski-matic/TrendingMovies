@@ -1,4 +1,4 @@
-package com.learning.trendingmovies
+package com.learning.trendingmovies.ui
 
 import android.os.Bundle
 import android.util.Log
@@ -7,6 +7,8 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
+import com.learning.trendingmovies.MovieListViewModel
+import com.learning.trendingmovies.R
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
@@ -79,7 +81,8 @@ class MovieListActivity : AppCompatActivity() {
     }
 
     private fun setupRecyclerView(recyclerView: RecyclerView) {
-        recyclerView.adapter = MovieListRecyclerViewAdapter(this, twoPane)
+        recyclerView.adapter =
+            MovieListRecyclerViewAdapter(this, twoPane)
 //        recyclerView.layoutManager = GridLayoutManager(this, 2)
         recyclerView.addItemDecoration(
             DividerItemDecoration(

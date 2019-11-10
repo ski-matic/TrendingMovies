@@ -1,4 +1,4 @@
-package com.learning.trendingmovies
+package com.learning.trendingmovies.data
 
 data class TrendingResults(
     var page: Int,

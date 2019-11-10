@@ -1,10 +1,11 @@
-package com.learning.trendingmovies
+package com.learning.trendingmovies.ui
 
 import android.content.Intent
 import android.os.Bundle
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import android.view.MenuItem
+import com.learning.trendingmovies.R
 import kotlinx.android.synthetic.main.activity_item_detail.*
 
 /**

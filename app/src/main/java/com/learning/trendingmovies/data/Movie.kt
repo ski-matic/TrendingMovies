@@ -1,4 +1,4 @@
-package com.learning.trendingmovies
+package com.learning.trendingmovies.data
 
 data class Movie(
     var poster_path: String?,
