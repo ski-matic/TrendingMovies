@@ -27,8 +27,9 @@ X Change recyclerView to be a gridlayout and
 X Update the app icon, FAB icon and colors
 X Added "fetchConfigurationAndMovies" to handle chaining the calls to make sure the configuration
   exists so when we go through the list of movies we can set the poster URL
+X Each Movie doesn't need the full poster URL since they all share a common base URL
+  X Save the common base URL to the Movie object and then create the posterURL when it's needed
 
-- Instead of each Movie have a full URL, maybe they could all share a base URL
 
 - Use Rx "zip" function that waits for both configuration and movie to be fetched instead of "fetchConfigurationAndMovies()"
 - When should the configuration be fetched?

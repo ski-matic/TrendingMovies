@@ -58,7 +58,7 @@ class MovieListRecyclerViewAdapter(
         val item = values[position]
 
         Picasso.with(holder.itemView.context)
-            .load(item.posterFullUrl)
+            .load(item.getPosterUrl())
 //            .placeholder()
             .into(holder.posterImage)
 

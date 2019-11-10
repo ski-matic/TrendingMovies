@@ -19,13 +19,16 @@ data class Movie(
     companion object {
         private const val TAG = "Movie"
         private const val POSTER_SIZE_INDEX = 2
+        private var posterBaseURL: String? = null
+
+        fun setPosterBaseURL(baseUrl: String, posterSizes: List<String>) {
+            val posterSize = posterSizes[POSTER_SIZE_INDEX]
+            posterBaseURL = "$baseUrl$posterSize"
+        }
     }
 
-    var posterFullUrl: String? = null
-
-    fun setPosterUrl(baseUrl: String, posterSizes: List<String>) {
-        val posterSize = posterSizes[POSTER_SIZE_INDEX]
-        posterFullUrl = "$baseUrl$posterSize$poster_path"
+    fun getPosterUrl(): String {
+        return "$posterBaseURL$poster_path"
     }
 
     override fun toString(): String {

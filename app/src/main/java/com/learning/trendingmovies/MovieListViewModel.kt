@@ -67,12 +67,10 @@ class MovieListViewModel constructor(application: Application) : AndroidViewMode
                     // "fetchConfigurationAndMovies()" makes fetch movies only after the configuration
                     // is retrieved.  This should be replace with a Rx "zip" call though
                     val config = configuration.value!!
-
-                    // It would be nice to set this list and then calculate the poster URLs after
-                    trendingResults.results.forEach {
-                        it.setPosterUrl(config.images.secure_base_url, config.images.poster_sizes)
-                    }
-
+                    Movie.setPosterBaseURL(
+                        config.images.secure_base_url,
+                        config.images.poster_sizes
+                    )
                     movies.postValue(trendingResults.results)
                 }, {
                     Log.d("Richard-debug", "$TAG: fetchMovies: error: " + it.message)
