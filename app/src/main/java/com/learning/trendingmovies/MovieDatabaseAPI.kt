@@ -1,5 +1,6 @@
 package com.learning.trendingmovies
 
+import com.learning.trendingmovies.data.Configuration
 import com.learning.trendingmovies.data.TrendingResults
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
@@ -16,7 +17,7 @@ interface MovieDatabaseAPI {
 
         fun create(): MovieDatabaseAPI {
             val retrofit = Retrofit.Builder()
-                .baseUrl("https://api.themoviedb.org/3/trending/")
+                .baseUrl("https://api.themoviedb.org/3/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io()))
                 .build()
@@ -25,10 +26,13 @@ interface MovieDatabaseAPI {
         }
     }
 
-    @GET("{mediaType}/{timeWindow}?api_key=$API_KEY")
+    @GET("trending/{mediaType}/{timeWindow}?api_key=$API_KEY")
     fun getMovies(
         @Path("mediaType") mediaType: String,
         @Path("timeWindow") timeWindow: String
     ): Single<TrendingResults>
+
+    @GET("configuration?api_key=$API_KEY")
+    fun getConfiguration(): Single<Configuration>
 
 }
