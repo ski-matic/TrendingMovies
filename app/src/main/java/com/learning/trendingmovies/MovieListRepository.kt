@@ -13,8 +13,21 @@ class MovieListRepository(application: Application) {
     }
 
     fun getAllMovies(): Single<TrendingResults> {
-        // mediaType:  "all", "movie", "tv", "person"
-        // timewindow: "day", "week"
-        return movieDatabaseAPI.getMovies("movie", "day")
+        return movieDatabaseAPI.getMovies(
+            MediaType.MOVIE.mediaTypeName,
+            TimeWindow.DAY.timeWindowName
+        )
+    }
+
+    enum class MediaType(val mediaTypeName: String) {
+        ALL("all"),
+        MOVIE("movie"),
+        TV("tv"),
+        PERSON("person");
+    }
+
+    enum class TimeWindow(val timeWindowName: String) {
+        DAY("day"),
+        WEEK("week");
     }
 }

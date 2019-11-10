@@ -6,9 +6,8 @@ A Master/Detail type project that displays a list of trending movies.  Tapping o
 
 
 Things that could be done:
-- API KEY could be incorporated into the retrofit call better somehow
 - Trending call options:
-  - Could give the user the ability to choose the paramters that are sent
+  - Could give the user the ability to choose the parameters that are sent
 
 Tasks:
 X Get data from server
