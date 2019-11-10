@@ -11,10 +11,8 @@ import com.google.android.material.snackbar.Snackbar
 import com.learning.trendingmovies.MovieListViewModel
 import com.learning.trendingmovies.R
 import com.learning.trendingmovies.data.Configuration
-import io.reactivex.android.schedulers.AndroidSchedulers
+import com.learning.trendingmovies.data.Movie
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.rxkotlin.plusAssign
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_item_list.*
 import kotlinx.android.synthetic.main.item_list.*
 
@@ -32,6 +30,7 @@ class MovieListActivity : AppCompatActivity() {
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
      * device.
      */
+    private val TAG = "MovieListActivity"
     private var twoPane: Boolean = false
     private lateinit var viewModel: MovieListViewModel
     private lateinit var disposables: CompositeDisposable
@@ -63,36 +62,18 @@ class MovieListActivity : AppCompatActivity() {
             twoPane = true
         }
 
-        fetchMovies()
+        viewModel.getMovies().observe(this, Observer<List<Movie>> {
+            Log.d("Richard-debug", "$TAG: movies: " + it.size)
+            val adapter = item_list.adapter as MovieListRecyclerViewAdapter
+            adapter.values = it
+            adapter.notifyDataSetChanged()
+        })
 
         viewModel.getConfiguration().observe(this, Observer<Configuration> {
-            Log.d("Richard-debug", "fetchConfiguration: " + it)
+            Log.d("Richard-debug", "$TAG: configuration: " + it)
         })
 
         setupRecyclerView(item_list)
-    }
-
-    private fun fetchConfiguration() {
-        viewModel.getConfiguration().observe(this, Observer<Configuration> {
-            Log.d("Richard-debug", "fetchConfiguration: " + it)
-        })
-    }
-
-    private fun fetchMovies() {
-        disposables +=
-            viewModel.fetchMovies()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    Log.d("Richard-debug", "fetchMovies: " + it)
-                    val adapter = item_list.adapter as MovieListRecyclerViewAdapter
-                    adapter.values = it.results
-                    adapter.notifyDataSetChanged()
-
-                }, {
-                    Log.d("Richard-debug", "fetchMovies: error: " + it.message)
-
-                })
     }
 
     private fun setupRecyclerView(recyclerView: RecyclerView) {

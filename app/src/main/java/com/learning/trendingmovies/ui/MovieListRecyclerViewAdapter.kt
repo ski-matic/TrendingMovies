@@ -15,16 +15,16 @@ import kotlinx.android.synthetic.main.item_list_content.view.*
 class MovieListRecyclerViewAdapter(
     private val parentActivity: MovieListActivity,
     private val twoPane: Boolean
-) :
-    RecyclerView.Adapter<MovieListRecyclerViewAdapter.ViewHolder>() {
+) : RecyclerView.Adapter<MovieListRecyclerViewAdapter.ViewHolder>() {
 
+    private val TAG = "MovieListRecyclerViewAdapter"
     var values: List<Movie> = emptyList()
     private val onClickListener: View.OnClickListener
 
     init {
         onClickListener = View.OnClickListener { v ->
             val item = v.tag as Movie
-            Log.d("Richard-debug", "clicked on: " + item)
+            Log.d("Richard-debug", "$TAG: clicked on: " + item)
             if (twoPane) {
                 val fragment = MoveDetailFragment().apply {
                     arguments = Bundle().apply {

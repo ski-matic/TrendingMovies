@@ -25,8 +25,6 @@ X Configuration
 
 - When should the configuration be fetched?
 
-
-- replace "Richard-debug" with something else
 - for each item, go fetch the image
   - to start, do this when the item is displayed?
   - when should this actually take place?  Should the "Movie" object contain the actual image?
@@ -37,6 +35,7 @@ X Configuration
   - How do we know what size to get?  Maybe something here to do in the future?
 - If the images pop back in in a strange order - how can we make sure they come back in correct order?
 - Make items tappable
+- replace "Richard-debug" with something else
 - When tapping an item go to detail view?
   - Or do they want an overlay specifically?
   - use the "backdrop" image?  Rather than "poster" image??

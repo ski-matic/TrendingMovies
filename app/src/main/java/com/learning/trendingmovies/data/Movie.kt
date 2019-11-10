@@ -15,5 +15,9 @@ data class Movie(
     var vote_count: Int,
     var video: Boolean,
     var vote_average: Float
-)
+) {
+    fun getPosterUrl(baseUrl: String): String {
+        return baseUrl + poster_path
+    }
+}
 

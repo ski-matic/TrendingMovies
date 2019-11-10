@@ -6,15 +6,16 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.learning.trendingmovies.data.Configuration
-import com.learning.trendingmovies.data.TrendingResults
-import io.reactivex.Single
+import com.learning.trendingmovies.data.Movie
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
+import io.reactivex.schedulers.Schedulers
 
 class MovieListViewModel constructor(application: Application) : AndroidViewModel(application) {
 
     private val TAG = "MovieListViewModel"
-//    private var repository: MovieListRepository = MovieListRepository(application)
+    //    private var repository: MovieListRepository = MovieListRepository(application)
     private var repository: MovieListRepository = MovieListRepository()
     private var disposables: CompositeDisposable = CompositeDisposable()
 
@@ -24,8 +25,27 @@ class MovieListViewModel constructor(application: Application) : AndroidViewMode
         }
     }
 
-    fun fetchMovies(): Single<TrendingResults> {
-        return repository.getAllMovies()
+    private val movies: MutableLiveData<List<Movie>> by lazy {
+        MutableLiveData<List<Movie>>().also {
+            fetchMovies()
+        }
+    }
+
+    fun getMovies(): LiveData<List<Movie>> {
+        return movies
+    }
+
+    fun fetchMovies() {
+        disposables +=
+            repository.getAllMovies()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    Log.d("Richard-debug", "$TAG: fetchMovies: " + it)
+                    movies.postValue(it.results)
+                }, {
+                    Log.d("Richard-debug", "$TAG: fetchMovies: error: " + it.message)
+                })
     }
 
     fun getConfiguration(): LiveData<Configuration> {
