@@ -24,10 +24,10 @@ A Master/Detail type project that displays a list of trending movies.  Tapping o
 - Each Movie doesn't need the full poster URL since they all share a common base URL
   - Save the common base URL to the Movie object and then create the posterURL when it's needed
 - Add a picasso "Placeholder" for the image when it's loading
-
+- Show a "no network" screen if there's no network connection
 
 ## Things to do next
-- handle no internet connection
+- handle if "fetchConfiguration" comes back with an error? (airplane mode will do this rightnow)
 - replace "Richard-debug" with something else
 - there's pages of data - how many pages to get?
 - When tapping an item go to detail view?
@@ -55,6 +55,7 @@ A Master/Detail type project that displays a list of trending movies.  Tapping o
 
 ## Known issues
 - I have the app icon showing in the title bar and the spacing is strange.  Would be nice to fix that
+- In fact, it would be better to replace the icon with a "hamburger" navigation icon if there were a navigation drawer
 - I didn't handle any tablet layouts at all, only phone (single pane vs. twoPane)
 
 
@@ -62,11 +63,13 @@ A Master/Detail type project that displays a list of trending movies.  Tapping o
 - Trending call options:
   - Could give the user the ability to choose the parameters that are sent
 - Use Rx "zip" function that waits for both configuration and movie to be fetched instead of "fetchConfigurationAndMovies()"
-- Download the images before the "onBindViewHolder" method so it might already be there
-- Don't hard code the number of columns - base it on dimensions of images and dimensions of screen
-- The Movie object could cache the poster image once it's loaded
+- Download the images before the "onBindViewHolder" method so they might already be there when needed
+- Don't hard code the number of columns - use the dimensions of images and dimensions of screen
+- The `Movie`object could cache the poster image once it's loaded
   - Would be nice to pre-load images before they are needed
-- Poster size is hard coded.  Would be better to figure out the best size
+- Poster size is hard coded.  Would be better to figure out the best size to use
+- Would be cool if there's no network, to detect if a connection becomes available to automatically
+  go and fetch the items
 
 
 
