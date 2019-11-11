@@ -30,6 +30,9 @@ A Master/Detail type project that displays a list of trending movies.  Tapping o
 - When the user submits a search query, display the results in the main view
 - When a search is completed the keyboard should automatically hide itself
 - When a search is "closed", get the list of "Trending" items again to be displayed
+- After searching, the keyboard stays up and tapping on the screen goes to the details rather than dismissing the keyboard
+- If the user scrolls down the list, then when a search is executed, the list should go back to the top.
+  - this feels a bit hacky.  It works.  Might be nicer to do a fade out/fade in or something
 
 ## Things to do next
 - think about how I would handle paging and infinite scrolling
@@ -38,17 +41,9 @@ A Master/Detail type project that displays a list of trending movies.  Tapping o
   - Or do they want an overlay specifically?
   - use the "backdrop" image?  Rather than "poster" image??
 - What to show in detail view?
-- Add search bar at the top?
-  - Use search button?
-  - Search as soon as the user types stuff?
-  - Delay (debounce?) before searching after keystrokes
-  - What would I be searching / filtering on exactly?  Or is it calling the search API?
-  - how to cancel a search?
-- replace "Richard-debug" with something else
 - there's pages of data - how many pages to get?
 - UX transitions?
 - Corner cases?
-  - No internet?
   - Rotate screen?
   - Language?
 - Tests
@@ -61,13 +56,13 @@ A Master/Detail type project that displays a list of trending movies.  Tapping o
 - I didn't handle any tablet layouts at all, only phone (single pane vs. twoPane)
 - Sanitizing / URL encoding the query string when doing a search
 - Handle the case where a movie doesn't have a poster image
-- After searching, the keyboard stays up and tapping on the screen goes to the details rather than dismissing the keyboard
-- If the user scrolls down the list, then when a search is executed, the list should go back to the top
+- A bit of a flash when going between "Search" and "Trending".  Would be nice to have a smoother transition
 
 ## Features I would do if I had more time
 - Trending call options:
   - Could give the user the ability to choose the parameters that are sent
-- Use Rx "zip" function that waits for both configuration and movie to be fetched instead of "fetchConfigurationAndMovies()".  See link [here](https://stackoverflow.com/questions/36474120/how-to-make-multiple-request-and-wait-until-data-is-come-from-all-the-requests-i)
+- Use Rx "zip" function that waits for both configuration and movie to be fetched instead of "fetchConfigurationAndMovies()"
+  - https://stackoverflow.com/questions/36474120/how-to-make-multiple-request-and-wait-until-data-is-come-from-all-the-requests-i
 - Download the images before the "onBindViewHolder" method so they might already be there when needed
 - Don't hard code the number of columns - use the dimensions of images and dimensions of screen
 - The `Movie`object could cache the poster image once it's loaded
@@ -78,6 +73,9 @@ A Master/Detail type project that displays a list of trending movies.  Tapping o
 - remove or make use of the code relating to "twoPane" (tablets)
 - The poster images should be cached in some way rather than always get fetched
 - Add recent query suggestions
+- Consider the idea of automatically searching as the user types
+- Might be nicer to do a fade out/fade in or something when transitioning between "Trending" and "Search"
+
 
 
 

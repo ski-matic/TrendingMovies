@@ -99,16 +99,24 @@ class MovieListActivity : AppCompatActivity(), SearchView.OnQueryTextListener,
         return true
     }
 
+    private fun adapterReset() {
+        val adapter = item_list.adapter as MovieListRecyclerViewAdapter
+        adapter.values = emptyList()
+        adapter.notifyDataSetChanged()
+        item_list.scrollToPosition(0)
+    }
+
     override fun onQueryTextSubmit(query: String?): Boolean {
         if (query != null) {
             viewModel.fetchSearchResults(query)
-//            searchView?.clearFocus()
+            adapterReset()
         }
         return false
     }
 
     override fun onMenuItemActionCollapse(p0: MenuItem?): Boolean {
         viewModel.fetchConfigurationAndMovies()
+        adapterReset()
         return true
     }
 
