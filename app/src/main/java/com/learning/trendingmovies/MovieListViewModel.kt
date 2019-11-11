@@ -50,7 +50,8 @@ class MovieListViewModel constructor(application: Application) : AndroidViewMode
                         configuration.postValue(it)
                         fetchMovies()
                     }, {
-                        Log.d(TAG, "fetchConfiguration: error: " + it.message)
+                        Log.d(TAG, "fetchConfigurationAndMovies: error: " + it.message)
+                        // Do something here such as posting a wrapped error to the livedata
                     })
         } else {
             fetchMovies()
@@ -74,6 +75,7 @@ class MovieListViewModel constructor(application: Application) : AndroidViewMode
                     movies.postValue(trendingResults.results)
                 }, {
                     Log.d("Richard-debug", "$TAG: fetchMovies: error: " + it.message)
+                    // Do something here such as posting a wrapped error to the livedata
                 })
     }
 
@@ -88,6 +90,7 @@ class MovieListViewModel constructor(application: Application) : AndroidViewMode
                     configuration.postValue(it)
                 }, {
                     Log.d(TAG, "fetchConfiguration: error: " + it.message)
+                    // Do something here such as posting a wrapped error to the livedata
                 })
     }
 

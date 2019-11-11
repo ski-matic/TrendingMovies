@@ -4,8 +4,11 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
@@ -27,7 +30,8 @@ import kotlinx.android.synthetic.main.no_connection.*
  * item details. On tablets, the activity presents the list of items and
  * item details side-by-side using two vertical panes.
  */
-class MovieListActivity : AppCompatActivity() {
+class MovieListActivity : AppCompatActivity(), SearchView.OnQueryTextListener,
+    MenuItem.OnActionExpandListener {
 
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
@@ -56,10 +60,10 @@ class MovieListActivity : AppCompatActivity() {
             Log.d(TAG, "$TAG: onCreate: network not available")
             no_connection.visibility = View.VISIBLE
             item_list.visibility = View.INVISIBLE
-            fab.hide()
             return
         }
 
+        fab.hide()
         fab.setOnClickListener { view ->
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show()
@@ -76,7 +80,7 @@ class MovieListActivity : AppCompatActivity() {
             twoPane = true
         }
 
-       viewModel.getMovies().observe(this, Observer<List<Movie>> {
+        viewModel.getMovies().observe(this, Observer<List<Movie>> {
             Log.d("Richard-debug", "$TAG: movies: " + it.size)
             val adapter = item_list.adapter as MovieListRecyclerViewAdapter
             adapter.values = it
@@ -89,6 +93,40 @@ class MovieListActivity : AppCompatActivity() {
     private fun setupRecyclerView(recyclerView: RecyclerView) {
         recyclerView.adapter = MovieListRecyclerViewAdapter(this, twoPane)
         recyclerView.layoutManager = GridLayoutManager(this, NUM_GRID_COLUMNS)
+    }
+
+    override fun onQueryTextChange(newText: String?): Boolean {
+        Log.d("Richard-debug", "$TAG: onQueryTextChange: " + newText)
+        return true
+    }
+
+    override fun onQueryTextSubmit(query: String?): Boolean {
+        Log.d("Richard-debug", "$TAG: onQueryTextSubmit: " + query)
+        return true
+    }
+
+    override fun onMenuItemActionCollapse(p0: MenuItem?): Boolean {
+        Log.d("Richard-debug", "$TAG: onMenuItemActionCollapse: " + p0)
+        return true
+    }
+
+    override fun onMenuItemActionExpand(p0: MenuItem?): Boolean {
+        Log.d("Richard-debug", "$TAG: onMenuItemActionExpand: " + p0)
+        return true
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_main, menu)
+        val menuItem = menu?.findItem(R.id.action_search)
+        val searchView = menuItem?.actionView as SearchView
+        searchView.apply {
+            isSubmitButtonEnabled = true
+            queryHint = getString(R.string.query_hint)
+            setOnQueryTextListener(this@MovieListActivity)
+        }
+        menuItem.setOnActionExpandListener(this)
+
+        return true
     }
 
     override fun onDestroy() {

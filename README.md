@@ -3,7 +3,6 @@ Trending Movies
 
 A Master/Detail type project that displays a list of trending movies.  Tapping on an item displays more detailed information
 
-
 ## Things I implemented
 - Get data from server
 - Parse data from server
@@ -25,11 +24,10 @@ A Master/Detail type project that displays a list of trending movies.  Tapping o
   - Save the common base URL to the Movie object and then create the posterURL when it's needed
 - Add a picasso "Placeholder" for the image when it's loading
 - Show a "no network" screen if there's no network connection
+- Add a search icon and SearchView to the actionbar
 
 ## Things to do next
-- handle if "fetchConfiguration" comes back with an error? (airplane mode will do this rightnow)
-- replace "Richard-debug" with something else
-- there's pages of data - how many pages to get?
+- remove fab
 - When tapping an item go to detail view?
   - Or do they want an overlay specifically?
   - use the "backdrop" image?  Rather than "poster" image??
@@ -40,18 +38,16 @@ A Master/Detail type project that displays a list of trending movies.  Tapping o
   - Delay (debounce?) before searching after keystrokes
   - What would I be searching / filtering on exactly?  Or is it calling the search API?
   - how to cancel a search?
+- replace "Richard-debug" with something else
+- there's pages of data - how many pages to get?
 - UX transitions?
 - Corner cases?
   - No internet?
   - Rotate screen?
   - Language?
 - Tests
-- Caching images?
-  - saving images?
 - Caching results?
   - DB?
-- remove twopane stuff?
-
 
 ## Known issues
 - I have the app icon showing in the title bar and the spacing is strange.  Would be nice to fix that
@@ -63,6 +59,7 @@ A Master/Detail type project that displays a list of trending movies.  Tapping o
 - Trending call options:
   - Could give the user the ability to choose the parameters that are sent
 - Use Rx "zip" function that waits for both configuration and movie to be fetched instead of "fetchConfigurationAndMovies()"
+  - https://stackoverflow.com/questions/36474120/how-to-make-multiple-request-and-wait-until-data-is-come-from-all-the-requests-i
 - Download the images before the "onBindViewHolder" method so they might already be there when needed
 - Don't hard code the number of columns - use the dimensions of images and dimensions of screen
 - The `Movie`object could cache the poster image once it's loaded
@@ -70,6 +67,11 @@ A Master/Detail type project that displays a list of trending movies.  Tapping o
 - Poster size is hard coded.  Would be better to figure out the best size to use
 - Would be cool if there's no network, to detect if a connection becomes available to automatically
   go and fetch the items
+- remove or make use of the code relating to "twoPane" (tablets)
+- The poster images should be cached in some way rather than always get fetched
+- Add recent query suggestions
+
+
 
 
 
