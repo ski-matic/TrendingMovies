@@ -1,6 +1,7 @@
 package com.learning.trendingmovies
 
 import com.learning.trendingmovies.data.Configuration
+import com.learning.trendingmovies.data.SearchResults
 import com.learning.trendingmovies.data.TrendingResults
 import io.reactivex.Single
 
@@ -35,4 +36,10 @@ class MovieListRepository() {
     fun getConfiguration(): Single<Configuration> {
         return movieDatabaseAPI.getConfiguration()
     }
+
+    fun getSearchResults(queryString: String): Single<SearchResults> {
+        // TODO: URL encode the string
+        return movieDatabaseAPI.getSearchResults(queryString)
+    }
+
 }

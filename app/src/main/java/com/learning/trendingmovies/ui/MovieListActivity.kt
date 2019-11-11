@@ -81,7 +81,7 @@ class MovieListActivity : AppCompatActivity(), SearchView.OnQueryTextListener,
         }
 
         viewModel.getMovies().observe(this, Observer<List<Movie>> {
-            Log.d("Richard-debug", "$TAG: movies: " + it.size)
+            Log.d(TAG, "$TAG: movies: " + it.size)
             val adapter = item_list.adapter as MovieListRecyclerViewAdapter
             adapter.values = it
             adapter.notifyDataSetChanged()
@@ -96,22 +96,23 @@ class MovieListActivity : AppCompatActivity(), SearchView.OnQueryTextListener,
     }
 
     override fun onQueryTextChange(newText: String?): Boolean {
-        Log.d("Richard-debug", "$TAG: onQueryTextChange: " + newText)
         return true
     }
 
     override fun onQueryTextSubmit(query: String?): Boolean {
-        Log.d("Richard-debug", "$TAG: onQueryTextSubmit: " + query)
-        return true
+        if (query != null) {
+            viewModel.fetchSearchResults(query)
+//            searchView?.clearFocus()
+        }
+        return false
     }
 
     override fun onMenuItemActionCollapse(p0: MenuItem?): Boolean {
-        Log.d("Richard-debug", "$TAG: onMenuItemActionCollapse: " + p0)
+        viewModel.fetchConfigurationAndMovies()
         return true
     }
 
     override fun onMenuItemActionExpand(p0: MenuItem?): Boolean {
-        Log.d("Richard-debug", "$TAG: onMenuItemActionExpand: " + p0)
         return true
     }
 

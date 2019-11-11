@@ -25,8 +25,14 @@ A Master/Detail type project that displays a list of trending movies.  Tapping o
 - Add a picasso "Placeholder" for the image when it's loading
 - Show a "no network" screen if there's no network connection
 - Add a search icon and SearchView to the actionbar
+- Handling searchView actions
+- Add retrofit query to the search API and add classes for the results
+- When the user submits a search query, display the results in the main view
+- When a search is completed the keyboard should automatically hide itself
+- When a search is "closed", get the list of "Trending" items again to be displayed
 
 ## Things to do next
+- think about how I would handle paging and infinite scrolling
 - remove fab
 - When tapping an item go to detail view?
   - Or do they want an overlay specifically?
@@ -53,7 +59,10 @@ A Master/Detail type project that displays a list of trending movies.  Tapping o
 - I have the app icon showing in the title bar and the spacing is strange.  Would be nice to fix that
 - In fact, it would be better to replace the icon with a "hamburger" navigation icon if there were a navigation drawer
 - I didn't handle any tablet layouts at all, only phone (single pane vs. twoPane)
-
+- Sanitizing / URL encoding the query string when doing a search
+- Handle the case where a movie doesn't have a poster image
+- After searching, the keyboard stays up and tapping on the screen goes to the details rather than dismissing the keyboard
+- If the user scrolls down the list, then when a search is executed, the list should go back to the top
 
 ## Features I would do if I had more time
 - Trending call options:

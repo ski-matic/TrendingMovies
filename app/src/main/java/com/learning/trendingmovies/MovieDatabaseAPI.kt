@@ -1,6 +1,7 @@
 package com.learning.trendingmovies
 
 import com.learning.trendingmovies.data.Configuration
+import com.learning.trendingmovies.data.SearchResults
 import com.learning.trendingmovies.data.TrendingResults
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
@@ -9,6 +10,7 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface MovieDatabaseAPI {
 
@@ -34,5 +36,10 @@ interface MovieDatabaseAPI {
 
     @GET("configuration?api_key=$API_KEY")
     fun getConfiguration(): Single<Configuration>
+
+    @GET("search/movie?api_key=$API_KEY")
+    fun getSearchResults(
+        @Query("query") queryString: String
+    ): Single<SearchResults>
 
 }

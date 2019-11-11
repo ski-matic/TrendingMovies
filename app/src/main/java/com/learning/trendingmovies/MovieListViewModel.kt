@@ -39,10 +39,6 @@ class MovieListViewModel constructor(application: Application) : AndroidViewMode
 
     // Replace this with Rx zip
     fun fetchConfigurationAndMovies() {
-        Log.d(
-            "Richard-debug",
-            "$TAG: fetchConfigurationAndMovies: configuration: " + configuration.value
-        )
         if (configuration.value == null) {
             disposables +=
                 repository.getConfiguration()
@@ -74,7 +70,7 @@ class MovieListViewModel constructor(application: Application) : AndroidViewMode
                     )
                     movies.postValue(trendingResults.results)
                 }, {
-                    Log.d("Richard-debug", "$TAG: fetchMovies: error: " + it.message)
+                    Log.d(TAG, "$TAG: fetchMovies: error: " + it.message)
                     // Do something here such as posting a wrapped error to the livedata
                 })
     }
@@ -99,4 +95,14 @@ class MovieListViewModel constructor(application: Application) : AndroidViewMode
         super.onCleared()
     }
 
+    fun fetchSearchResults(queryString: String) {
+        disposables +=
+            repository.getSearchResults(queryString)
+                .subscribe({
+                    movies.postValue(it.results)
+                }, {
+                    Log.d(TAG, "$TAG: fetchSearchResults: error: " + it.message)
+                    // Do something here such as posting a wrapped error to the livedata
+                })
+    }
 }
