@@ -67,8 +67,7 @@ A Master/Detail type project that displays a list of trending movies.  Tapping o
 ## Features I would do if I had more time
 - Trending call options:
   - Could give the user the ability to choose the parameters that are sent
-- Use Rx "zip" function that waits for both configuration and movie to be fetched instead of "fetchConfigurationAndMovies()"
-  - https://stackoverflow.com/questions/36474120/how-to-make-multiple-request-and-wait-until-data-is-come-from-all-the-requests-i
+- Use Rx "zip" function that waits for both configuration and movie to be fetched instead of "fetchConfigurationAndMovies()".  See link [here](https://stackoverflow.com/questions/36474120/how-to-make-multiple-request-and-wait-until-data-is-come-from-all-the-requests-i)
 - Download the images before the "onBindViewHolder" method so they might already be there when needed
 - Don't hard code the number of columns - use the dimensions of images and dimensions of screen
 - The `Movie`object could cache the poster image once it's loaded
