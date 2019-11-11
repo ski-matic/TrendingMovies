@@ -59,7 +59,7 @@ class MovieListRecyclerViewAdapter(
 
         Picasso.with(holder.itemView.context)
             .load(item.getPosterUrl())
-//            .placeholder()
+            .placeholder(R.drawable.loading)
             .into(holder.posterImage)
 
         with(holder.itemView) {

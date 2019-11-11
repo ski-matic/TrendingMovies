@@ -23,35 +23,26 @@ X Configuration
   X Make "Configuration" fetched using retrofit
   X save the configuration to the viewModel and expose it to the activity via LiveData
 X Load the poster image using picasso
-X Change recyclerView to be a gridlayout and
+X Change recyclerView to be a gridlayout
 X Update the app icon, FAB icon and colors
 X Added "fetchConfigurationAndMovies" to handle chaining the calls to make sure the configuration
   exists so when we go through the list of movies we can set the poster URL
 X Each Movie doesn't need the full poster URL since they all share a common base URL
   X Save the common base URL to the Movie object and then create the posterURL when it's needed
+X Add a picasso "Placeholder" for the image when it's loading
 
-
-- Use Rx "zip" function that waits for both configuration and movie to be fetched instead of "fetchConfigurationAndMovies()"
-- When should the configuration be fetched?
-
-- When I get the list of movies back, it would be nice to set that list in the UI and maybe calculate the poster URL's afterward
-  instead of waiting until all the poster URL's have been created on the movies in the list
-
-- Download the images before the "onBindViewHolder" method so it might already be there
-
-- Don't hard code the number of colums - base it on dimensions of images and dimensions of screen
-- Add a picasso "Placeholder" for the image when it's loading
-- Use Picasso to resize the image to the size of the cell it's in
-- Poster size is hard coded.  Would be better to figure out the best size
 - handle no internet connection
-- for each item, go fetch the image
-  - to start, do this when the item is displayed?
-  - when should this actually take place?  Should the "Movie" object contain the actual image?
-- turn the rows into a grid
-- swipe to refresh
-- display the image in the recyclerView
-  - Compose code to get the URL for the movie (using configuration)
-  - How do we know what size to get?  Maybe something here to do in the future?
+
+
+
+TO DO if there is time
+- Use Rx "zip" function that waits for both configuration and movie to be fetched instead of "fetchConfigurationAndMovies()"
+- Download the images before the "onBindViewHolder" method so it might already be there
+- Don't hard code the number of columns - base it on dimensions of images and dimensions of screen
+- The Movie object could cache the poster image once it's loaded
+- Poster size is hard coded.  Would be better to figure out the best size
+
+
 - If the images pop back in in a strange order - how can we make sure they come back in correct order?
 - Make items tappable
 - replace "Richard-debug" with something else
