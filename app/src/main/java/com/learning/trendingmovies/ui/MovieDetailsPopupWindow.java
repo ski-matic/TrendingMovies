@@ -1,11 +1,15 @@
 package com.learning.trendingmovies.ui;
 
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.transition.Fade;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewGroupOverlay;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
@@ -17,12 +21,13 @@ import com.squareup.picasso.Picasso;
 public class MovieDetailsPopupWindow extends PopupWindow {
 
     private static final int FADE_DURATION = 600;
-    private View parent;
+    private static final float DIM_AMOUNT = 0.7f;
+    private ViewGroup parent;
     private TextView description;
     private TextView title;
     private ImageView image;
 
-    private MovieDetailsPopupWindow(View parent) {
+    private MovieDetailsPopupWindow(ViewGroup parent) {
         super(ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT
         );
@@ -57,14 +62,36 @@ public class MovieDetailsPopupWindow extends PopupWindow {
         description.setText(movie.getOverview());
         Picasso.with(parent.getContext())
                 .load(movie.getBackdropFullUrl())
-                .placeholder(R.drawable.backdrop_loading)
+                .placeholder(R.drawable.backdrop_loading30)
                 .into(image);
 
+        applyDim();
+
+        setOnDismissListener(new OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                parent.getOverlay().clear();
+            }
+        });
         showAtLocation(parent, Gravity.CENTER, 0, 0);
     }
 
-    public static void show(View parent, Movie movie) {
-        MovieDetailsPopupWindow popupWindow = new MovieDetailsPopupWindow(parent);
+    private void applyDim() {
+        Drawable dim = new ColorDrawable(Color.BLACK);
+        dim.setBounds(0, 0, parent.getWidth(), parent.getHeight());
+        dim.setAlpha((int) (255 * DIM_AMOUNT));
+
+        parent.getOverlay().add(dim);
+    }
+
+    /***
+     * Create and show a PopupWindow displaying the details of a movie
+     *
+     * @param root Note that this needs to be a root of the window, so it can be dimmed
+     * @param movie The movie to be displayed
+     */
+    public static void show(final ViewGroup root, final Movie movie) {
+        MovieDetailsPopupWindow popupWindow = new MovieDetailsPopupWindow(root);
         popupWindow.show(movie);
     }
 }

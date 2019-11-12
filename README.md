@@ -35,9 +35,11 @@ A Master/Detail type project that displays a list of trending movies.  Tapping o
   - this feels a bit hacky.  It works.  Might be nicer to do a fade out/fade in or something
 - add a PopupWindow that is displayed when tapping on a movie
 - Pass in the movie to display information of that movie
-- Add code to display a backdrop image in the detail overlay
+- display a backdrop image in the detail overlay
+- dim the background when the overlay is displayed
 
 ## Things to do next
+- Add comments!
 - think about how I would handle paging and infinite scrolling
 - remove fab
 - Corner cases?

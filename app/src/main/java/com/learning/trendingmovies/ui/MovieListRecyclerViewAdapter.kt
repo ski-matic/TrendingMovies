@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.learning.trendingmovies.R
 import com.learning.trendingmovies.data.Movie
 import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.activity_item_list.*
 import kotlinx.android.synthetic.main.item_list_content.view.*
 
 class MovieListRecyclerViewAdapter(
@@ -26,7 +27,7 @@ class MovieListRecyclerViewAdapter(
         onClickListener = View.OnClickListener { v ->
             val item = v.tag as Movie
 
-            MovieDetailsPopupWindow.show(v, item)
+            MovieDetailsPopupWindow.show(parentActivity.frameLayout, item)
 
             /*
             if (twoPane) {
