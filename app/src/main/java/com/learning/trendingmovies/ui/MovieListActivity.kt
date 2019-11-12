@@ -22,14 +22,6 @@ import kotlinx.android.synthetic.main.activity_item_list.*
 import kotlinx.android.synthetic.main.item_list.*
 import kotlinx.android.synthetic.main.no_connection.*
 
-/**
- * An activity representing a list of Pings. This activity
- * has different presentations for handset and tablet-size devices. On
- * handsets, the activity presents a list of items, which when touched,
- * lead to a [MovieDetailActivity] representing
- * item details. On tablets, the activity presents the list of items and
- * item details side-by-side using two vertical panes.
- */
 class MovieListActivity : AppCompatActivity(), SearchView.OnQueryTextListener,
     MenuItem.OnActionExpandListener {
 
@@ -62,10 +54,6 @@ class MovieListActivity : AppCompatActivity(), SearchView.OnQueryTextListener,
             item_list.visibility = View.INVISIBLE
             return
         }
-
-        fab.hide()
-//        fab.setOnClickListener {
-//        }
 
         if (item_detail_container != null) {
             // The detail container view will be present only in the
@@ -137,7 +125,6 @@ class MovieListActivity : AppCompatActivity(), SearchView.OnQueryTextListener,
             setOnQueryTextListener(this@MovieListActivity)
         }
         menuItem.setOnActionExpandListener(this)
-
         return true
     }
 

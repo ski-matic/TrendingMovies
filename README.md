@@ -40,9 +40,6 @@ A Master/Detail type project that displays a list of trending movies.  Tapping o
 
 ## Things to do next
 - think about how I would handle paging and infinite scrolling
-- remove fab
-- Corner cases?
-  - Rotate screen?
   - Language?
 - Tests
 - Caching results?
@@ -61,6 +58,7 @@ A Master/Detail type project that displays a list of trending movies.  Tapping o
   - It should be scrollable
 - If a detail overlay is shown and the screen is rotated the overlay disappears  
 - If a search is executed, and then the screen is rotated, the search is cleared
+- After a search, sometimes when dismissing a detail popup, the keyboard will pop back up
 
 ## Features I would do if I had more time
 - Trending call options:
@@ -69,7 +67,7 @@ A Master/Detail type project that displays a list of trending movies.  Tapping o
   - https://stackoverflow.com/questions/36474120/how-to-make-multiple-request-and-wait-until-data-is-come-from-all-the-requests-i
 - Download the images before the "onBindViewHolder" method so they might already be there when needed
 - Don't hard code the number of columns - use the dimensions of images and dimensions of screen
-- The `Movie`object could cache the poster image once it's loaded
+- The `Movie` object could cache the poster image once it's loaded
   - Would be nice to pre-load images before they are needed
 - Poster size is hard coded.  Would be better to figure out the best size to use
 - Would be cool if there's no network, to detect if a connection becomes available to automatically
@@ -79,9 +77,5 @@ A Master/Detail type project that displays a list of trending movies.  Tapping o
 - Add recent query suggestions
 - Consider the idea of automatically searching as the user types
 - Might be nicer to do a fade out/fade in or something when transitioning between "Trending" and "Search"
-
-
-
-
 
 

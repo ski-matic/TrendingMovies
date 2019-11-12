@@ -22,15 +22,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".ui.MovieDetailActivity"
-            android:label="@string/title_item_detail"
-            android:parentActivityName=".ui.MovieListActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.learning.trendingmovies.ui.MovieListActivity" />
-        </activity>
     </application>
 
 </manifest>
