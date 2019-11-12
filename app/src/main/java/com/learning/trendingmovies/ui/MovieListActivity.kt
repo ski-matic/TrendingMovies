@@ -12,7 +12,6 @@ import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.learning.trendingmovies.MovieListViewModel
 import com.learning.trendingmovies.R
 import com.learning.trendingmovies.data.Configuration
@@ -34,9 +33,10 @@ class MovieListActivity : AppCompatActivity(), SearchView.OnQueryTextListener,
         private const val NUM_GRID_COLUMNS = 3
     }
 
-    private var twoPane: Boolean = false
     private lateinit var viewModel: MovieListViewModel
     private lateinit var disposables: CompositeDisposable
+
+    private var searchView: SearchView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,9 +45,7 @@ class MovieListActivity : AppCompatActivity(), SearchView.OnQueryTextListener,
         setSupportActionBar(toolbar)
         toolbar.title = title
 
-        disposables = CompositeDisposable()
-        viewModel = ViewModelProviders.of(this).get(MovieListViewModel::class.java)
-
+        // Check if the network is available, if not, show an error
         if (!networkAvailable(this)) {
             Log.d(TAG, "$TAG: onCreate: network not available")
             no_connection.visibility = View.VISIBLE
@@ -55,14 +53,10 @@ class MovieListActivity : AppCompatActivity(), SearchView.OnQueryTextListener,
             return
         }
 
-        if (item_detail_container != null) {
-            // The detail container view will be present only in the
-            // large-screen layouts (res/values-w900dp).
-            // If this view is present, then the
-            // activity should be in two-pane mode.
-            twoPane = true
-        }
+        disposables = CompositeDisposable()
+        viewModel = ViewModelProviders.of(this).get(MovieListViewModel::class.java)
 
+        // Observe the configuration so if one is received we can set the base URLs on the Movie object
         viewModel.getConfiguration().observe(this, Observer<Configuration> {
             Movie.setPosterBaseURL(
                 it.images.secure_base_url,
@@ -71,6 +65,7 @@ class MovieListActivity : AppCompatActivity(), SearchView.OnQueryTextListener,
             )
         })
 
+        // When a list of movies is set, update the recyclerView with the items
         viewModel.getMovies().observe(this, Observer<List<Movie>> {
             Log.d(TAG, "$TAG: movies: " + it.size)
             val adapter = item_list.adapter as MovieListRecyclerViewAdapter
@@ -78,48 +73,68 @@ class MovieListActivity : AppCompatActivity(), SearchView.OnQueryTextListener,
             adapter.notifyDataSetChanged()
         })
 
-        setupRecyclerView(item_list)
+        item_list.adapter = MovieListRecyclerViewAdapter(this)
+
+        // It would be nice to not have the number of columns hard coded, it doesn't
+        // display well in portrait
+        item_list.layoutManager = GridLayoutManager(this, NUM_GRID_COLUMNS)
     }
 
-    private fun setupRecyclerView(recyclerView: RecyclerView) {
-        recyclerView.adapter = MovieListRecyclerViewAdapter(this, twoPane)
-        recyclerView.layoutManager = GridLayoutManager(this, NUM_GRID_COLUMNS)
-    }
-
+    /**
+     * If the search text changes, don't do anything.
+     * We could potentially search as they type
+     */
     override fun onQueryTextChange(newText: String?): Boolean {
         return true
     }
 
-    private fun adapterReset() {
+    /***
+     * This is called to clear the adapter when a new list of movies is set
+     */
+    private fun clearAdapter() {
         val adapter = item_list.adapter as MovieListRecyclerViewAdapter
         adapter.values = emptyList()
         adapter.notifyDataSetChanged()
         item_list.scrollToPosition(0)
     }
 
+    /***
+     * When a search is submitted, fetch the results, clear the current list of movies
+     * and clear the focus from the search bar (otherwise the keyboard will popup unexpectantly)
+     */
     override fun onQueryTextSubmit(query: String?): Boolean {
         if (query != null) {
             viewModel.fetchSearchResults(query)
-            adapterReset()
+            clearAdapter()
+            searchView?.clearFocus()
         }
         return false
     }
 
+    /***
+     * When the search is close, get the trending movies back again
+     */
     override fun onMenuItemActionCollapse(p0: MenuItem?): Boolean {
         viewModel.fetchConfigurationAndMovies()
-        adapterReset()
+        clearAdapter()
         return true
     }
 
+    /***
+     * Nothing specified is done when the search bar is opened
+     */
     override fun onMenuItemActionExpand(p0: MenuItem?): Boolean {
         return true
     }
 
+    /***
+     * Ensure that the search icon is displayed
+     */
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_main, menu)
         val menuItem = menu?.findItem(R.id.action_search)
-        val searchView = menuItem?.actionView as SearchView
-        searchView.apply {
+        searchView = menuItem?.actionView as SearchView
+        searchView?.apply {
             isSubmitButtonEnabled = true
             queryHint = getString(R.string.query_hint)
             setOnQueryTextListener(this@MovieListActivity)
@@ -133,7 +148,10 @@ class MovieListActivity : AppCompatActivity(), SearchView.OnQueryTextListener,
         super.onDestroy()
     }
 
-    fun networkAvailable(context: Context): Boolean {
+    /***
+     * Convenience funciton to check if the network is available
+     */
+    private fun networkAvailable(context: Context): Boolean {
         val conMgr = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val activeNetwork = conMgr.activeNetworkInfo ?: return false
         return if (!activeNetwork.isConnected) false else activeNetwork.isAvailable

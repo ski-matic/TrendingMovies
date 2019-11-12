@@ -12,8 +12,7 @@ import kotlinx.android.synthetic.main.activity_item_list.*
 import kotlinx.android.synthetic.main.item_list_content.view.*
 
 class MovieListRecyclerViewAdapter(
-    private val parentActivity: MovieListActivity,
-    private val twoPane: Boolean
+    private val parentActivity: MovieListActivity
 ) : RecyclerView.Adapter<MovieListRecyclerViewAdapter.ViewHolder>() {
 
     companion object {
@@ -26,28 +25,7 @@ class MovieListRecyclerViewAdapter(
     init {
         onClickListener = View.OnClickListener { v ->
             val item = v.tag as Movie
-
             MovieDetailsPopupWindow.show(parentActivity.frameLayout, item)
-
-            /*
-            if (twoPane) {
-                val fragment = MoveDetailFragment().apply {
-                    arguments = Bundle().apply {
-                        putString(MoveDetailFragment.ARG_ITEM_ID, item.id.toString())
-                    }
-                }
-                parentActivity.supportFragmentManager
-                    .beginTransaction()
-                    .replace(R.id.item_detail_container, fragment)
-                    .commit()
-            } else {
-                val intent = Intent(v.context, MovieDetailActivity::class.java).apply {
-                    putExtra(MoveDetailFragment.ARG_ITEM_ID, item.id)
-                }
-                v.context.startActivity(intent)
-            }
-
-             */
         }
     }
 

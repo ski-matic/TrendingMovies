@@ -59,6 +59,7 @@ A Master/Detail type project that displays a list of trending movies.  Tapping o
 - If a detail overlay is shown and the screen is rotated the overlay disappears  
 - If a search is executed, and then the screen is rotated, the search is cleared
 - After a search, sometimes when dismissing a detail popup, the keyboard will pop back up
+  - I may have fixed this, but didn't test thoroughly
 
 ## Features I would do if I had more time
 - Trending call options:
@@ -72,7 +73,6 @@ A Master/Detail type project that displays a list of trending movies.  Tapping o
 - Poster size is hard coded.  Would be better to figure out the best size to use
 - Would be cool if there's no network, to detect if a connection becomes available to automatically
   go and fetch the items
-- remove or make use of the code relating to "twoPane" (tablets)
 - The poster images should be cached in some way rather than always get fetched
 - Add recent query suggestions
 - Consider the idea of automatically searching as the user types
