@@ -19,16 +19,28 @@ data class Movie(
     companion object {
         private const val TAG = "Movie"
         private const val POSTER_SIZE_INDEX = 2
+        private const val BACKDROP_SIZE_INDEX = 2
         private var posterBaseURL: String? = null
+        private var backdropBaseURL: String? = null
 
-        fun setPosterBaseURL(baseUrl: String, posterSizes: List<String>) {
+        fun setPosterBaseURL(
+            baseUrl: String,
+            posterSizes: List<String>,
+            backdropSizes: List<String>
+        ) {
             val posterSize = posterSizes[POSTER_SIZE_INDEX]
             posterBaseURL = "$baseUrl$posterSize"
+            val backdropSize = backdropSizes[BACKDROP_SIZE_INDEX]
+            backdropBaseURL = "$baseUrl$backdropSize"
         }
     }
 
-    fun getPosterUrl(): String {
+    fun getPosterFullUrl(): String {
         return "$posterBaseURL$poster_path"
+    }
+
+    fun getBackdropFullUrl(): String {
+        return "$backdropBaseURL$backdrop_path"
     }
 
     override fun toString(): String {

@@ -1,8 +1,5 @@
 package com.learning.trendingmovies.ui
 
-import android.content.Intent
-import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -63,8 +60,8 @@ class MovieListRecyclerViewAdapter(
         val item = values[position]
 
         Picasso.with(holder.itemView.context)
-            .load(item.getPosterUrl())
-            .placeholder(R.drawable.loading)
+            .load(item.getPosterFullUrl())
+            .placeholder(R.drawable.poster_loading)
             .into(holder.posterImage)
 
         with(holder.itemView) {

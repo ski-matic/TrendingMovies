@@ -78,7 +78,8 @@ class MovieListActivity : AppCompatActivity(), SearchView.OnQueryTextListener,
         viewModel.getConfiguration().observe(this, Observer<Configuration> {
             Movie.setPosterBaseURL(
                 it.images.secure_base_url,
-                it.images.poster_sizes
+                it.images.poster_sizes,
+                it.images.backdrop_sizes
             )
         })
 
