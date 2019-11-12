@@ -43,7 +43,7 @@ class MovieListViewModel constructor(application: Application) : AndroidViewMode
             disposables +=
                 repository.getConfiguration()
                     .subscribe({
-                        configuration.postValue(it)
+                        gotNewConfiguration(it)
                         fetchMovies()
                     }, {
                         Log.d(TAG, "fetchConfigurationAndMovies: error: " + it.message)
@@ -60,14 +60,6 @@ class MovieListViewModel constructor(application: Application) : AndroidViewMode
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
                 .subscribe({ trendingResults ->
-                    // We should be gauranteed to have a configuration at this point because
-                    // "fetchConfigurationAndMovies()" makes fetch movies only after the configuration
-                    // is retrieved.  This should be replace with a Rx "zip" call though
-                    val config = configuration.value!!
-                    Movie.setPosterBaseURL(
-                        config.images.secure_base_url,
-                        config.images.poster_sizes
-                    )
                     movies.postValue(trendingResults.results)
                 }, {
                     Log.d(TAG, "$TAG: fetchMovies: error: " + it.message)
@@ -79,11 +71,20 @@ class MovieListViewModel constructor(application: Application) : AndroidViewMode
         return configuration
     }
 
+    // TODO: maybe the UI should observe the configuation and set the Movie base URL when it's updated
+    private fun gotNewConfiguration(c: Configuration) {
+        configuration.postValue(c)
+        Movie.setPosterBaseURL(
+            c.images.secure_base_url,
+            c.images.poster_sizes
+        )
+    }
+
     private fun fetchConfiguration() {
         disposables +=
             repository.getConfiguration()
                 .subscribe({
-                    configuration.postValue(it)
+                    gotNewConfiguration(it)
                 }, {
                     Log.d(TAG, "fetchConfiguration: error: " + it.message)
                     // Do something here such as posting a wrapped error to the livedata
