@@ -1,0 +1,61 @@
+Index: app/src/main/java/com/learning/trendingmovies/ui/MovieListActivity.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.learning.trendingmovies.ui\n\nimport android.content.Context\nimport android.net.ConnectivityManager\nimport android.os.Bundle\nimport android.util.Log\nimport android.view.Menu\nimport android.view.MenuItem\nimport android.view.View\nimport androidx.appcompat.app.AppCompatActivity\nimport androidx.appcompat.widget.SearchView\nimport androidx.lifecycle.Observer\nimport androidx.lifecycle.ViewModelProviders\nimport androidx.recyclerview.widget.GridLayoutManager\nimport androidx.recyclerview.widget.RecyclerView\nimport com.google.android.material.snackbar.Snackbar\nimport com.learning.trendingmovies.MovieListViewModel\nimport com.learning.trendingmovies.R\nimport com.learning.trendingmovies.data.Movie\nimport io.reactivex.disposables.CompositeDisposable\nimport kotlinx.android.synthetic.main.activity_item_list.*\nimport kotlinx.android.synthetic.main.item_list.*\nimport kotlinx.android.synthetic.main.no_connection.*\n\n/**\n * An activity representing a list of Pings. This activity\n * has different presentations for handset and tablet-size devices. On\n * handsets, the activity presents a list of items, which when touched,\n * lead to a [MovieDetailActivity] representing\n * item details. On tablets, the activity presents the list of items and\n * item details side-by-side using two vertical panes.\n */\nclass MovieListActivity : AppCompatActivity(), SearchView.OnQueryTextListener,\n    MenuItem.OnActionExpandListener {\n\n    /**\n     * Whether or not the activity is in two-pane mode, i.e. running on a tablet\n     * device.\n     */\n    companion object {\n        private const val TAG = \"MovieListActivity\"\n        private const val NUM_GRID_COLUMNS = 3\n    }\n\n    private var twoPane: Boolean = false\n    private lateinit var viewModel: MovieListViewModel\n    private lateinit var disposables: CompositeDisposable\n\n    override fun onCreate(savedInstanceState: Bundle?) {\n        super.onCreate(savedInstanceState)\n        setContentView(R.layout.activity_item_list)\n\n        setSupportActionBar(toolbar)\n        toolbar.title = title\n\n        disposables = CompositeDisposable()\n        viewModel = ViewModelProviders.of(this).get(MovieListViewModel::class.java)\n\n        if (!networkAvailable(this)) {\n            Log.d(TAG, \"$TAG: onCreate: network not available\")\n            no_connection.visibility = View.VISIBLE\n            item_list.visibility = View.INVISIBLE\n            return\n        }\n\n        fab.hide()\n        fab.setOnClickListener { view ->\n            Snackbar.make(view, \"Replace with your own action\", Snackbar.LENGTH_LONG)\n                .setAction(\"Action\", null).show()\n\n            viewModel.fetchConfigurationAndMovies()\n\n        }\n\n        if (item_detail_container != null) {\n            // The detail container view will be present only in the\n            // large-screen layouts (res/values-w900dp).\n            // If this view is present, then the\n            // activity should be in two-pane mode.\n            twoPane = true\n        }\n\n        viewModel.getMovies().observe(this, Observer<List<Movie>> {\n            Log.d(TAG, \"$TAG: movies: \" + it.size)\n            val adapter = item_list.adapter as MovieListRecyclerViewAdapter\n            adapter.values = it\n            adapter.notifyDataSetChanged()\n        })\n\n        setupRecyclerView(item_list)\n    }\n\n    private fun setupRecyclerView(recyclerView: RecyclerView) {\n        recyclerView.adapter = MovieListRecyclerViewAdapter(this, twoPane)\n        recyclerView.layoutManager = GridLayoutManager(this, NUM_GRID_COLUMNS)\n    }\n\n    override fun onQueryTextChange(newText: String?): Boolean {\n        return true\n    }\n\n    override fun onQueryTextSubmit(query: String?): Boolean {\n        if (query != null) {\n            viewModel.fetchSearchResults(query)\n//            searchView?.clearFocus()\n        }\n        return false\n    }\n\n    override fun onMenuItemActionCollapse(p0: MenuItem?): Boolean {\n        viewModel.fetchConfigurationAndMovies()\n        return true\n    }\n\n    override fun onMenuItemActionExpand(p0: MenuItem?): Boolean {\n        return true\n    }\n\n    override fun onCreateOptionsMenu(menu: Menu?): Boolean {\n        menuInflater.inflate(R.menu.menu_main, menu)\n        val menuItem = menu?.findItem(R.id.action_search)\n        val searchView = menuItem?.actionView as SearchView\n        searchView.apply {\n            isSubmitButtonEnabled = true\n            queryHint = getString(R.string.query_hint)\n            setOnQueryTextListener(this@MovieListActivity)\n        }\n        menuItem.setOnActionExpandListener(this)\n\n        return true\n    }\n\n    override fun onDestroy() {\n        disposables.clear()\n        super.onDestroy()\n    }\n\n    fun networkAvailable(context: Context): Boolean {\n        val conMgr = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager\n        val activeNetwork = conMgr.activeNetworkInfo ?: return false\n        return if (!activeNetwork.isConnected) false else activeNetwork.isAvailable\n    }\n}\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/learning/trendingmovies/ui/MovieListActivity.kt	(revision 3e4f32fd4197912b54a8b13dcf0eaeea2a91e02e)
++++ app/src/main/java/com/learning/trendingmovies/ui/MovieListActivity.kt	(date 1573451730000)
+@@ -102,13 +102,14 @@
+     override fun onQueryTextSubmit(query: String?): Boolean {
+         if (query != null) {
+             viewModel.fetchSearchResults(query)
+-//            searchView?.clearFocus()
++            item_list.scrollToPosition(0)
+         }
+         return false
+     }
+ 
+     override fun onMenuItemActionCollapse(p0: MenuItem?): Boolean {
+         viewModel.fetchConfigurationAndMovies()
++        item_list.scrollToPosition(0)
+         return true
+     }
+ 
+Index: README.md
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>Trending Movies\n============================\n\nA Master/Detail type project that displays a list of trending movies.  Tapping on an item displays more detailed information\n\n## Things I implemented\n- Get data from server\n- Parse data from server\n- Create UI of main screen to be a grid of items (recyclerView)\n- Get data retrieved from web call from repository -> viewModel -> UI\n- display the list of movies (titles)\n- replace the linearLayout of each row item with a constraintLayout\n- Update the icon of the app\n- Load the data automatically when the app starts\n- Configuration\n  - Make \"Configuration\" fetched using retrofit\n  - save the configuration to the viewModel and expose it to the activity via LiveData\n- Load the poster image using picasso\n- Change recyclerView to be a gridlayout\n- Update the app icon, FAB icon and colors\n- Added \"fetchConfigurationAndMovies\" to handle chaining the calls to make sure the configuration\n  exists so when we go through the list of movies we can set the poster URL\n- Each Movie doesn't need the full poster URL since they all share a common base URL\n  - Save the common base URL to the Movie object and then create the posterURL when it's needed\n- Add a picasso \"Placeholder\" for the image when it's loading\n- Show a \"no network\" screen if there's no network connection\n- Add a search icon and SearchView to the actionbar\n- Handling searchView actions\n- Add retrofit query to the search API and add classes for the results\n- When the user submits a search query, display the results in the main view\n- When a search is completed the keyboard should automatically hide itself\n- When a search is \"closed\", get the list of \"Trending\" items again to be displayed\n\n## Things to do next\n- think about how I would handle paging and infinite scrolling\n- remove fab\n- When tapping an item go to detail view?\n  - Or do they want an overlay specifically?\n  - use the \"backdrop\" image?  Rather than \"poster\" image??\n- What to show in detail view?\n- Add search bar at the top?\n  - Use search button?\n  - Search as soon as the user types stuff?\n  - Delay (debounce?) before searching after keystrokes\n  - What would I be searching / filtering on exactly?  Or is it calling the search API?\n  - how to cancel a search?\n- replace \"Richard-debug\" with something else\n- there's pages of data - how many pages to get?\n- UX transitions?\n- Corner cases?\n  - No internet?\n  - Rotate screen?\n  - Language?\n- Tests\n- Caching results?\n  - DB?\n\n## Known issues\n- I have the app icon showing in the title bar and the spacing is strange.  Would be nice to fix that\n- In fact, it would be better to replace the icon with a \"hamburger\" navigation icon if there were a navigation drawer\n- I didn't handle any tablet layouts at all, only phone (single pane vs. twoPane)\n- Sanitizing / URL encoding the query string when doing a search\n- Handle the case where a movie doesn't have a poster image\n- After searching, the keyboard stays up and tapping on the screen goes to the details rather than dismissing the keyboard\n- If the user scrolls down the list, then when a search is executed, the list should go back to the top\n\n## Features I would do if I had more time\n- Trending call options:\n  - Could give the user the ability to choose the parameters that are sent\n- Use Rx \"zip\" function that waits for both configuration and movie to be fetched instead of \"fetchConfigurationAndMovies()\"\n  - https://stackoverflow.com/questions/36474120/how-to-make-multiple-request-and-wait-until-data-is-come-from-all-the-requests-i\n- Download the images before the \"onBindViewHolder\" method so they might already be there when needed\n- Don't hard code the number of columns - use the dimensions of images and dimensions of screen\n- The `Movie`object could cache the poster image once it's loaded\n  - Would be nice to pre-load images before they are needed\n- Poster size is hard coded.  Would be better to figure out the best size to use\n- Would be cool if there's no network, to detect if a connection becomes available to automatically\n  go and fetch the items\n- remove or make use of the code relating to \"twoPane\" (tablets)\n- The poster images should be cached in some way rather than always get fetched\n- Add recent query suggestions\n\n\n\n\n\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- README.md	(revision 3e4f32fd4197912b54a8b13dcf0eaeea2a91e02e)
++++ README.md	(date 1573451500000)
+@@ -38,17 +38,9 @@
+   - Or do they want an overlay specifically?
+   - use the "backdrop" image?  Rather than "poster" image??
+ - What to show in detail view?
+-- Add search bar at the top?
+-  - Use search button?
+-  - Search as soon as the user types stuff?
+-  - Delay (debounce?) before searching after keystrokes
+-  - What would I be searching / filtering on exactly?  Or is it calling the search API?
+-  - how to cancel a search?
+-- replace "Richard-debug" with something else
+ - there's pages of data - how many pages to get?
+ - UX transitions?
+ - Corner cases?
+-  - No internet?
+   - Rotate screen?
+   - Language?
+ - Tests
+@@ -79,6 +71,8 @@
+ - remove or make use of the code relating to "twoPane" (tablets)
+ - The poster images should be cached in some way rather than always get fetched
+ - Add recent query suggestions
++- Consider the idea of automatically searching as the user types
++
+ 
+ 
+ 

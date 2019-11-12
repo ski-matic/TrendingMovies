@@ -1,53 +1,43 @@
-Trending Movies
-============================
+# Trending Movies
 
-A Master/Detail type project that displays a list of trending movies.  Tapping on an item displays more detailed information
+A project that displays a list of trending movies and allows the user to search for movies.  
+Tapping on an item displays more detailed information in a popup window.
 
 ## Things I implemented
-- Get data from server
-- Parse data from server
-- Create UI of main screen to be a grid of items (recyclerView)
-- Get data retrieved from web call from repository -> viewModel -> UI
-- display the list of movies (titles)
-- replace the linearLayout of each row item with a constraintLayout
-- Update the icon of the app
-- Load the data automatically when the app starts
-- Configuration
-  - Make "Configuration" fetched using retrofit
-  - save the configuration to the viewModel and expose it to the activity via LiveData
-- Load the poster image using picasso
-- Change recyclerView to be a gridlayout
-- Update the app icon, FAB icon and colors
-- Added "fetchConfigurationAndMovies" to handle chaining the calls to make sure the configuration
-  exists so when we go through the list of movies we can set the poster URL
-- Each Movie doesn't need the full poster URL since they all share a common base URL
-  - Save the common base URL to the Movie object and then create the posterURL when it's needed
-- Add a picasso "Placeholder" for the image when it's loading
-- Show a "no network" screen if there's no network connection
-- Add a search icon and SearchView to the actionbar
-- Handling searchView actions
-- Add retrofit query to the search API and add classes for the results
-- When the user submits a search query, display the results in the main view
-- When a search is completed the keyboard should automatically hide itself
-- When a search is "closed", get the list of "Trending" items again to be displayed
-- After searching, the keyboard stays up and tapping on the screen goes to the details rather than dismissing the keyboard
-- If the user scrolls down the list, then when a search is executed, the list should go back to the top.
-  - this feels a bit hacky.  It works.  Might be nicer to do a fade out/fade in or something
-- add a PopupWindow that is displayed when tapping on a movie
-- Pass in the movie to display information of that movie
-- display a backdrop image in the detail overlay
-- dim the background when the overlay is displayed
-
-## Things to do next
-- think about how I would handle paging and infinite scrolling
-  - Language?
-- Tests
-- Caching results?
-  - DB?
+### Trending movies list 
+- Created a basic app structure with `MovieListActivity`, a viewModel named `MovieListViewModel`, a repository named `MovieListRepository` and an API class named `MovieDatabaseAPI`
+- Retrieved "Trending movie" list data from the Movie DB server using the `retrofit` library for the request
+- Created a recyclerView and recyclerViewAdapter in the main Activity screen as a grid of items using `GridLayoutManager`
+- Bubbled up the `List<Movie>` from the repository to the UI as liveData ( `LiveData<List<Movie>>` ) 
+- Showed the movie titles in the recyclerView items (later to be replaced with images)
+- Updated the recyclerView item layout (use `ConstraintLayout` rather than `LinearLayout` and added appropriate fields)
+- Updated the icon and the colours of the app
+- Observed the `LiveData` of movies when the main activity is created, which will cause the movie list to load and display when the app launches
+### Poster images
+- Retrieved the `Configuration` from the server using `retrofit`, saved it in the viewModel and exposed it as LiveData to the UI
+- Added `fetchConfigurationAndMovies` which ensures a configuration has been fetched before the movie list is fetched (this could be better - see below)
+- Set the base URL for posters and backdrop images in the `Movie` object when a `Configuration` is obtained
+- Used `Picasso` to load the poster image when the Movie object is bound to RecyclerView
+- Added a Picasso "placeholder" image for when the poster image is loading
+### Search
+- Added a search icon and `SearchView` to the actionbar, and added handlers for the assocated actions
+- Added a `retrofit` call to search the API and added classes for the `SearchResults`
+- Displayed the results of a search query by setting the LiveData Movie List to the results, and minimize the keyboard
+- Set the list to "Trending" items when a search is "closed"
+- Moved to the top of the Movie list when switching between "Trending" and "Search"
+  - It might be nicer to do a fade out/fade in or something to avoid the flash of white
+### Details PopupWindow
+- Added a `PopupWindow` that is displayed when tapping on a movie and pass in the `Movie` to be displayed
+- Filled in the contents of the `PopupWindow` with the movie details
+- Loaded the backdrop image using `Picasso` with a placeholder image
+- Dimmed the background behind the `PopupWindow` when the details overlay is displayed
+- Added a fun animation to make the `PopupWindow` "slide in"
+### Handle no network
+- Showed a "no network" screen if there's no network connection
 
 ## Known issues
 - I have the app icon showing in the title bar and the spacing is strange.  Would be nice to fix that
-- In fact, it would be better to replace the icon with a "hamburger" navigation icon if there were a navigation drawer
+  - In fact, it would be better to replace the icon with a "hamburger" navigation icon if there were a navigation drawer
 - I didn't handle any tablet layouts at all, only phone (single pane vs. twoPane)
 - Sanitizing / URL encoding the query string when doing a search
 - Handle the case where a movie doesn't have a poster image or backdrop image
@@ -73,9 +63,13 @@ A Master/Detail type project that displays a list of trending movies.  Tapping o
 - Poster size is hard coded.  Would be better to figure out the best size to use
 - Would be cool if there's no network, to detect if a connection becomes available to automatically
   go and fetch the items
+- Unit tests
 - The poster images should be cached in some way rather than always get fetched
 - Add recent query suggestions
-- Consider the idea of automatically searching as the user types
+- Consider the idea of searching each time the user modifies the search string
 - Might be nicer to do a fade out/fade in or something when transitioning between "Trending" and "Search"
+- Results could be saved to a DB so that the app is semi-functional offline
+- I noticed towards the end that I could fetch "page 2" of the data by adding a query parameter
+  - I would load more results as the user continues to scroll
 
 
