@@ -38,9 +38,7 @@ A Master/Detail type project that displays a list of trending movies.  Tapping o
 
 ## Things to do next
 - think about how I would handle paging and infinite scrolling
-- there's pages of data - how many pages to get?
 - remove fab
-- UX transitions?
 - Corner cases?
   - Rotate screen?
   - Language?
@@ -56,6 +54,7 @@ A Master/Detail type project that displays a list of trending movies.  Tapping o
 - Handle the case where a movie doesn't have a poster image
 - A bit of a flash when going between "Search" and "Trending".  Would be nice to have a smoother transition
 - When the details overlay is being displayed, on an older version of Android it appears that tapping outside the overlay won't dismiss it
+  - The back button should at least close it
 
 ## Features I would do if I had more time
 - Trending call options:

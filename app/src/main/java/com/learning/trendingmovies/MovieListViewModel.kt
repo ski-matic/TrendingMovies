@@ -43,7 +43,7 @@ class MovieListViewModel constructor(application: Application) : AndroidViewMode
             disposables +=
                 repository.getConfiguration()
                     .subscribe({
-                        gotNewConfiguration(it)
+                        configuration.postValue(it)
                         fetchMovies()
                     }, {
                         Log.d(TAG, "fetchConfigurationAndMovies: error: " + it.message)
@@ -71,20 +71,11 @@ class MovieListViewModel constructor(application: Application) : AndroidViewMode
         return configuration
     }
 
-    // TODO: maybe the UI should observe the configuation and set the Movie base URL when it's updated
-    private fun gotNewConfiguration(c: Configuration) {
-        configuration.postValue(c)
-        Movie.setPosterBaseURL(
-            c.images.secure_base_url,
-            c.images.poster_sizes
-        )
-    }
-
     private fun fetchConfiguration() {
         disposables +=
             repository.getConfiguration()
                 .subscribe({
-                    gotNewConfiguration(it)
+                    configuration.postValue(it)
                 }, {
                     Log.d(TAG, "fetchConfiguration: error: " + it.message)
                     // Do something here such as posting a wrapped error to the livedata

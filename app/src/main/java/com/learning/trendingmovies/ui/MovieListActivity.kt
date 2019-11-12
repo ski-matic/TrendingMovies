@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.learning.trendingmovies.MovieListViewModel
 import com.learning.trendingmovies.R
+import com.learning.trendingmovies.data.Configuration
 import com.learning.trendingmovies.data.Movie
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_item_list.*
@@ -73,6 +74,13 @@ class MovieListActivity : AppCompatActivity(), SearchView.OnQueryTextListener,
             // activity should be in two-pane mode.
             twoPane = true
         }
+
+        viewModel.getConfiguration().observe(this, Observer<Configuration> {
+            Movie.setPosterBaseURL(
+                it.images.secure_base_url,
+                it.images.poster_sizes
+            )
+        })
 
         viewModel.getMovies().observe(this, Observer<List<Movie>> {
             Log.d(TAG, "$TAG: movies: " + it.size)
