@@ -39,7 +39,6 @@ A Master/Detail type project that displays a list of trending movies.  Tapping o
 - dim the background when the overlay is displayed
 
 ## Things to do next
-- Add comments!
 - think about how I would handle paging and infinite scrolling
 - remove fab
 - Corner cases?
@@ -54,10 +53,14 @@ A Master/Detail type project that displays a list of trending movies.  Tapping o
 - In fact, it would be better to replace the icon with a "hamburger" navigation icon if there were a navigation drawer
 - I didn't handle any tablet layouts at all, only phone (single pane vs. twoPane)
 - Sanitizing / URL encoding the query string when doing a search
-- Handle the case where a movie doesn't have a poster image
+- Handle the case where a movie doesn't have a poster image or backdrop image
 - A bit of a flash when going between "Search" and "Trending".  Would be nice to have a smoother transition
 - When the details overlay is being displayed, on an older version of Android it appears that tapping outside the overlay won't dismiss it
   - The back button should at least close it
+- If the screen is rotated into landscape, the detail overlay doesn't usually fit on the screen.
+  - It should be scrollable
+- If a detail overlay is shown and the screen is rotated the overlay disappears  
+- If a search is executed, and then the screen is rotated, the search is cleared
 
 ## Features I would do if I had more time
 - Trending call options:

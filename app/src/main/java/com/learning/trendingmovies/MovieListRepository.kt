@@ -5,8 +5,7 @@ import com.learning.trendingmovies.data.SearchResults
 import com.learning.trendingmovies.data.TrendingResults
 import io.reactivex.Single
 
-//class MovieListRepository(application: Application) {
-class MovieListRepository() {
+class MovieListRepository {
 
     private val movieDatabaseAPI: MovieDatabaseAPI
 

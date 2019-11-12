@@ -17,7 +17,6 @@ class MovieListViewModel constructor(application: Application) : AndroidViewMode
         private const val TAG = "MovieListViewModel"
     }
 
-    //    private var repository: MovieListRepository = MovieListRepository(application)
     private var repository: MovieListRepository = MovieListRepository()
     private var disposables: CompositeDisposable = CompositeDisposable()
 
@@ -37,7 +36,12 @@ class MovieListViewModel constructor(application: Application) : AndroidViewMode
         return movies
     }
 
-    // Replace this with Rx zip
+    /***
+     * This checks if the configuration exists yet or not, if not it fetches it followed by
+     * fetching the list of movies.
+     *
+     * This should be replaced with something like Rx zip
+     */
     fun fetchConfigurationAndMovies() {
         if (configuration.value == null) {
             disposables +=
@@ -54,6 +58,9 @@ class MovieListViewModel constructor(application: Application) : AndroidViewMode
         }
     }
 
+    /***
+     * Fetches the list of movies and posts the results to the LiveData
+     */
     private fun fetchMovies() {
         disposables +=
             repository.getAllMovies()
@@ -71,6 +78,9 @@ class MovieListViewModel constructor(application: Application) : AndroidViewMode
         return configuration
     }
 
+    /***
+     * Fetches the configuration and posts the result to the LiveData
+     */
     private fun fetchConfiguration() {
         disposables +=
             repository.getConfiguration()
@@ -87,6 +97,9 @@ class MovieListViewModel constructor(application: Application) : AndroidViewMode
         super.onCleared()
     }
 
+    /***
+     * Fetches the search results and posts them to the LiveData
+     */
     fun fetchSearchResults(queryString: String) {
         disposables +=
             repository.getSearchResults(queryString)

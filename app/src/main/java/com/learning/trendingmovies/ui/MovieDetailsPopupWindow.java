@@ -4,12 +4,11 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
-import android.transition.Fade;
+import android.transition.Slide;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewGroupOverlay;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
@@ -20,7 +19,7 @@ import com.squareup.picasso.Picasso;
 
 public class MovieDetailsPopupWindow extends PopupWindow {
 
-    private static final int FADE_DURATION = 600;
+    private static final int TRANSITION_DURATION = 600;
     private static final float DIM_AMOUNT = 0.7f;
     private ViewGroup parent;
     private TextView description;
@@ -45,8 +44,11 @@ public class MovieDetailsPopupWindow extends PopupWindow {
         setContentView(view);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            setEnterTransition(new Fade().setDuration(FADE_DURATION));
-            setExitTransition(new Fade().setDuration(FADE_DURATION));
+            Slide slide = new Slide();
+            slide.setSlideEdge(Gravity.BOTTOM);
+            slide.setDuration(TRANSITION_DURATION);
+            setEnterTransition(slide);
+            setExitTransition(slide);
         }
 
         view.setOnClickListener(new View.OnClickListener() {

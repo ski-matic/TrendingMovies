@@ -1,7 +1,6 @@
 package com.learning.trendingmovies.data
 
 data class Configuration(
-//    val change_keys: List<String>,
     val images: Images
 ) {
     override fun toString(): String {
