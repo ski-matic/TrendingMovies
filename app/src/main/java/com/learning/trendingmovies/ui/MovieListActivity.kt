@@ -13,7 +13,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.snackbar.Snackbar
 import com.learning.trendingmovies.MovieListViewModel
 import com.learning.trendingmovies.R
 import com.learning.trendingmovies.data.Movie
@@ -64,13 +63,8 @@ class MovieListActivity : AppCompatActivity(), SearchView.OnQueryTextListener,
         }
 
         fab.hide()
-        fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
-
-            viewModel.fetchConfigurationAndMovies()
-
-        }
+//        fab.setOnClickListener {
+//        }
 
         if (item_detail_container != null) {
             // The detail container view will be present only in the

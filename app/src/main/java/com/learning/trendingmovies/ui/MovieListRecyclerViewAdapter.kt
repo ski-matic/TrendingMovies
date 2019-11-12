@@ -28,7 +28,10 @@ class MovieListRecyclerViewAdapter(
     init {
         onClickListener = View.OnClickListener { v ->
             val item = v.tag as Movie
-            Log.d("Richard-debug", "$TAG: clicked on: " + item)
+
+            MovieDetailsPopupWindow.show(v, item)
+
+            /*
             if (twoPane) {
                 val fragment = MoveDetailFragment().apply {
                     arguments = Bundle().apply {
@@ -45,6 +48,8 @@ class MovieListRecyclerViewAdapter(
                 }
                 v.context.startActivity(intent)
             }
+
+             */
         }
     }
 

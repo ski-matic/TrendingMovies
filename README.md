@@ -33,15 +33,13 @@ A Master/Detail type project that displays a list of trending movies.  Tapping o
 - After searching, the keyboard stays up and tapping on the screen goes to the details rather than dismissing the keyboard
 - If the user scrolls down the list, then when a search is executed, the list should go back to the top.
   - this feels a bit hacky.  It works.  Might be nicer to do a fade out/fade in or something
+- add a PopupWindow that is displayed when tapping on a movie
+- Pass in the movie to display information of that movie
 
 ## Things to do next
 - think about how I would handle paging and infinite scrolling
-- remove fab
-- When tapping an item go to detail view?
-  - Or do they want an overlay specifically?
-  - use the "backdrop" image?  Rather than "poster" image??
-- What to show in detail view?
 - there's pages of data - how many pages to get?
+- remove fab
 - UX transitions?
 - Corner cases?
   - Rotate screen?
@@ -57,6 +55,7 @@ A Master/Detail type project that displays a list of trending movies.  Tapping o
 - Sanitizing / URL encoding the query string when doing a search
 - Handle the case where a movie doesn't have a poster image
 - A bit of a flash when going between "Search" and "Trending".  Would be nice to have a smoother transition
+- When the details overlay is being displayed, on an older version of Android it appears that tapping outside the overlay won't dismiss it
 
 ## Features I would do if I had more time
 - Trending call options:
