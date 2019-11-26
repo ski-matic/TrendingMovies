@@ -7,7 +7,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.learning.trendingmovies.data.Configuration
 import com.learning.trendingmovies.data.Movie
+import com.learning.trendingmovies.data.TrendingResults
+import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.functions.BiFunction
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers
 
@@ -22,7 +25,7 @@ class MovieListViewModel constructor(application: Application) : AndroidViewMode
 
     private val configuration: MutableLiveData<Configuration> by lazy {
         MutableLiveData<Configuration>().also {
-            fetchConfiguration()
+            fetchConfigurationAndMovies()
         }
     }
 
@@ -43,18 +46,27 @@ class MovieListViewModel constructor(application: Application) : AndroidViewMode
      * This should be replaced with something like Rx zip
      */
     fun fetchConfigurationAndMovies() {
-        if (configuration.value == null) {
-            disposables +=
-                repository.getConfiguration()
-                    .subscribe({
-                        configuration.postValue(it)
-                        fetchMovies()
-                    }, {
-                        Log.d(TAG, "fetchConfigurationAndMovies: error: " + it.message)
-                        // Do something here such as posting a wrapped error to the livedata
-                    })
-        } else {
-            fetchMovies()
+
+        if (disposables.size() == 0) {
+            disposables += Single.zip(
+                repository.getConfiguration(),
+                repository.getAllMovies(),
+                BiFunction<Configuration, TrendingResults, Pair<Configuration, TrendingResults>> { configuration, trendingResult ->
+                    Pair(configuration, trendingResult)
+                }
+            )
+                .observeOn(Schedulers.io())
+                .subscribeOn(Schedulers.io())
+                .subscribe({
+                    // It's important to post the configuration before the movies, since the movies use the configuration
+                    configuration.postValue(it.first)
+
+                    Thread.sleep(2000)
+                    movies.postValue(it.second.results)
+                }, {
+                    Log.d(TAG, "fetchConfigurationAndMovies: error: " + it.message)
+                    // Do something here such as posting a wrapped error to the livedata
+                })
         }
     }
 
